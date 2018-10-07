@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ namespace Blockchain_Core.Models
     public class CryptoCurrency
     {
         private List<Transaction> _currentTransactions = new List<Transaction>();
-        private readonly List<Block> _chain = new List<Block>();
+        private List<Block> _chain = new List<Block>();
         private List<Node> _nodes = new List<Node>();
 
         private Block _lastBlock => _chain.Last();
@@ -158,6 +160,160 @@ namespace Blockchain_Core.Models
                     Fees = 0
                 });
             }
+        }
+
+        private bool ResolveConflicts()
+        {
+            List<Block> newChain = null;
+            int maxLength = _chain.Count;
+
+            foreach (Node node in _nodes)
+            {
+                var url = new Uri(node.Address, "/chain");
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                var response = (HttpWebResponse)request.GetResponse();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var model = new
+                    {
+                        chain = new List<Block>(),
+                        length = 0
+                    };
+                    string json = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                    var data = JsonConvert.DeserializeAnonymousType(json, model);
+
+                    if (data.chain.Count > _chain.Count && IsValidChain(data.chain))
+                    {
+                        maxLength = data.chain.Count;
+                        newChain = data.chain;
+                    }
+                }
+            }
+
+            if (newChain != null)
+            {
+                _chain = newChain;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsValidChain(List<Block> chain)
+        {
+            Block block = null;
+            Block lastBlock = chain.First();
+            int currentIndex = 1;
+            while (currentIndex < chain.Count)
+            {
+                block = chain.ElementAt(currentIndex);
+
+                //Check that the hash of the block is correct
+                if (block.PreviousHash != GetHash(lastBlock))
+                    return false;
+
+                //Check that the Proof of Work is correct
+                if (!IsValidProof(block.Transactions, block.Proof, lastBlock.PreviousHash))
+                    return false;
+
+                lastBlock = block;
+                currentIndex++;
+            }
+
+            return true;
+        }
+
+
+        //web server calls
+        internal Block Mine()
+        {
+            int proof = CreateProofOfWork(_lastBlock.PreviousHash);
+
+            Block block = CreateNewBlock(proof /*, _lastBlock.PreviousHash*/);
+
+            return block;
+        }
+
+        internal string GetFullChain()
+        {
+            var response = new
+            {
+                chain = _chain.ToArray(),
+                length = _chain.Count
+            };
+
+            return JsonConvert.SerializeObject(response);
+        }
+
+        internal string RegisterNodes(string[] nodes)
+        {
+            var builder = new StringBuilder();
+            foreach (string node in nodes)
+            {
+                string url = node;//$"http://{node}";
+                RegisterNode(url);
+                builder.Append($"{url}, ");
+            }
+
+            builder.Insert(0, $"{nodes.Count()} new nodes have been added: ");
+            string result = builder.ToString();
+            return result.Substring(0, result.Length - 2);
+        }
+
+        internal object Consensus()
+        {
+            bool replaced = ResolveConflicts();
+            string message = replaced ? "was replaced" : "is authoritive";
+
+            var response = new
+            {
+                Message = $"Our chain {message}",
+                Chain = _chain
+            };
+
+            return response;//JsonConvert.SerializeObject(response);
+        }
+
+        internal object CreateTransaction(Transaction transaction)
+        {
+            var rsp = new object();
+            //verify
+            var verified = Verify_transaction_signature(transaction, transaction.Signature, transaction.Sender);
+            if (verified == false || transaction.Sender == transaction.Recipient)
+            {
+                rsp = new { message = $"Invalid Transaction!" };
+                return rsp;
+            }
+            if (HasBalance(transaction) == false)
+            {
+                rsp = new { message = $"InSufficient Balance" };
+                return rsp;
+            }
+
+            AddTransaction(transaction);
+
+            var blockIndex = _lastBlock != null ? _lastBlock.Index + 1 : 0;
+
+            rsp = new { message = $"Transaction will be added to Block {blockIndex}" };
+            return rsp;
+        }
+
+        internal List<Transaction> GetTransactions()
+        {
+            return _currentTransactions;
+        }
+        internal List<Block> GetBlocks()
+        {
+            return _chain;
+        }
+        internal List<Node> GetNodes()
+        {
+            return _nodes;
+        }
+        internal Wallet GetMinersWallet()
+        {
+            return _minersWallet;
         }
     }
 }
