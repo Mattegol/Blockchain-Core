@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blockchain_Core.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blockchain_Core.Controllers.Api
 {
+    [EnableCors("MyPolicy")]
     [Produces("application/json")]
     [Route("")]
     public class BlockchainController : Controller
