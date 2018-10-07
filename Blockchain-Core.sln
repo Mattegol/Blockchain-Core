@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain-Core", "Blockchain-Core\Blockchain-Core.csproj", "{DCCA83BD-D3F8-4AA6-9DF6-61A4374166C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain-Core", "Blockchain-Core\Blockchain-Core.csproj", "{DCCA83BD-D3F8-4AA6-9DF6-61A4374166C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSA", "RSA\RSA.csproj", "{64FBC8C0-65C1-4C16-B18D-1DBFF645F157}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DCCA83BD-D3F8-4AA6-9DF6-61A4374166C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCCA83BD-D3F8-4AA6-9DF6-61A4374166C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCCA83BD-D3F8-4AA6-9DF6-61A4374166C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64FBC8C0-65C1-4C16-B18D-1DBFF645F157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64FBC8C0-65C1-4C16-B18D-1DBFF645F157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64FBC8C0-65C1-4C16-B18D-1DBFF645F157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64FBC8C0-65C1-4C16-B18D-1DBFF645F157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
