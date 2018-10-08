@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Blockchain_Core_Client.Models;
+using Newtonsoft.Json;
 
 namespace Blockchain_Core_Client.Controllers
 {
@@ -18,6 +21,40 @@ namespace Blockchain_Core_Client.Controllers
         public IActionResult MakeTransaction()
         {
             return View();
+        }
+
+        public IActionResult ViewTransaction()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ViewTransaction(string nodeUrl)
+        {
+            var url = new Uri(nodeUrl + "/chain");
+            ViewBag.Blocks = GetChain(url);
+
+            return View();
+        }
+
+        private List<Block> GetChain(Uri url)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            var response = (HttpWebResponse)request.GetResponse();
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var model = new
+                {
+                    chain = new List<Block>(),
+                    length = 0
+                };
+                string json = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                var data = JsonConvert.DeserializeAnonymousType(json, model);
+
+                return data.chain;
+            }
+            return null;
         }
 
         public IActionResult About()
