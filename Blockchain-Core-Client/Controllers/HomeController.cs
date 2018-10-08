@@ -15,6 +15,11 @@ namespace Blockchain_Core_Client.Controllers
             return View();
         }
 
+        public IActionResult MakeTransaction()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
