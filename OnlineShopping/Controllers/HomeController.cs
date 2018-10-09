@@ -36,6 +36,10 @@ namespace OnlineShopping.Controllers
             return Content("successfull");
         }
 
+        public IActionResult QrGenerate()
+        {
+            return View();
+        }
 
         public IActionResult Error()
         {
