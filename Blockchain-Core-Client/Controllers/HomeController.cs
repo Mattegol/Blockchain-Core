@@ -37,6 +37,32 @@ namespace Blockchain_Core_Client.Controllers
             return View();
         }
 
+        public IActionResult WalletTransaction()
+        {
+            return View(new List<Transaction>());
+        }
+
+        [HttpPost]
+        public IActionResult WalletTransaction(string publicKey)
+        {
+            var url = new Uri("http://localhost:61820" + "/chain");
+            var blocks = GetChain(url);
+            ViewBag.publickey = publicKey;
+
+            return View(TransactionByAddress(publicKey, blocks));
+        }
+
+        private List<Transaction> TransactionByAddress(string ownerAddress, List<Block> chain)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (var block in chain.OrderByDescending(x => x.Index))
+            {
+                var ownerTransactions = block.Transactions.Where(x => x.Sender == ownerAddress || x.Recipient == ownerAddress).ToList();
+                transactions.AddRange(ownerTransactions);
+            }
+            return transactions;
+        }
+
         private List<Block> GetChain(Uri url)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
