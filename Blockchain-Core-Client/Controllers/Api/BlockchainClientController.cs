@@ -29,7 +29,7 @@ namespace Blockchain_Core_Client.Controllers.Api
         public IActionResult NewTransaction(TransactionClient transaction)
         {
             var sign = RSA.RSA.Sign(transaction.SenderPrivateKey, transaction.ToString());
-            var response = new { transaction = transaction, signature = sign };
+            var response = new { transaction, signature = sign };
 
             return Ok(response);
         }

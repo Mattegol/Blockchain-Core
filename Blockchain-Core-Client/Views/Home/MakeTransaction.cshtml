@@ -13,14 +13,13 @@
 
 <br>
 
-
 <div class="container alert alert-secondary">
     <form id="transaction_form">
 
         <div class="row">
             <label class="col-sm-2">Sender Address:</label>
             <div class="col-sm-10">
-                <input type="text" name="SenderAddress" id="sender_address" rows="2" class="form-control" value="">
+                <input type="text" name="SenderAddress" id="SenderAddress" rows="2" class="form-control" value="">
 
             </div>
         </div>
@@ -39,7 +38,7 @@
         <div class="row">
             <label class="col-sm-2">Recipient Address:</label>
             <div class="col-sm-10">
-                <input type="text" name="RecipientAddress" id="recipient_address" rows="2" class="form-control" value="">
+                <input type="text" name="RecipientAddress" id="RecipientAddress" rows="2" class="form-control" value="">
             </div>
         </div>
 
@@ -48,7 +47,7 @@
         <div class="row">
             <label class="col-sm-2">Amount to Send:</label>
             <div class="col-sm-10">
-                <input type="text" name="amount" id="amount" rows="2" class="form-control" value="">
+                <input type="text" name="Amount" id="amount" rows="2" class="form-control" value="">
             </div>
         </div>
 
@@ -89,7 +88,6 @@
             <div class="modal-body">
 
                 <form id="confirmation_transaction_form">
-
                     <div class="row">
                         <label class="col-sm-12">Sender Address:</label>
                         <div class="col-sm-12">
@@ -97,42 +95,36 @@
 
                         </div>
                     </div>
-
                     <div class="row">
                         <label class="col-sm-12">Recipient Address:</label>
                         <div class="col-sm-12">
                             <input type="text" name="Recipient" id="confirmation_recipient_address" rows="2" class="form-control" readonly>
                         </div>
                     </div>
-
                     <div class="row">
                         <label class="col-sm-12">Amount to Send:</label>
                         <div class="col-sm-12">
                             <input type="text" name="Amount" id="confirmation_amount" rows="2" class="form-control" readonly>
                         </div>
                     </div>
-
                     <div class="row">
                         <label class="col-sm-12">Fees:</label>
                         <div class="col-sm-12">
                             <input type="text" name="Fees" id="confirmation_fees" rows="2" class="form-control" readonly>
                         </div>
                     </div>
-
                     <div class="row">
                         <label class="col-sm-12">Transaction Signature:</label>
                         <div class="col-sm-12">
                             <input type="text" name="Signature" id="transaction_signature" rows="2" class="form-control" readonly>
                         </div>
                     </div>
-
                 </form>
-
 
                 <div class="row">
                     <label class="col-sm-12">Blockchain Node URL:</label>
                     <div class="col-sm-12">
-                        <input type="text" name="node_url" id="node_url" rows="2" class="form-control" value="http://localhost:12304">
+                        <input type="text" name="node_url" id="node_url" rows="2" class="form-control" value="http://localhost:61820/">
                     </div>
                 </div>
 
@@ -147,7 +139,6 @@
 
     </div>
 </div>
-
 
 <!-- Alert Message for successful transaction -->
 <div class="modal modal-alert fade" id="success_transaction_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -182,16 +173,16 @@
 
     $(function () {
         $("#generate_transaction").click(function () {
-
             $.ajax({
                 url: "/generate/transaction",
                 type: "POST",
                 dataType: 'json',
                 data: $('#transaction_form').serialize(),
                 success: function (response) {
+                    console.log(JSON.stringify(response));
 
-                    document.getElementById("confirmation_sender_address").value = response["transaction"]["sender_address"];
-                    document.getElementById("confirmation_recipient_address").value = response["transaction"]["recipient_address"];
+                    document.getElementById("confirmation_sender_address").value = response["transaction"]["senderAddress"];
+                    document.getElementById("confirmation_recipient_address").value = response["transaction"]["recipientAddress"];
                     document.getElementById("confirmation_amount").value = response["transaction"]["amount"];
                     document.getElementById("confirmation_fees").value = response["transaction"]["fees"];
                     document.getElementById("transaction_signature").value = response["signature"];
@@ -203,24 +194,22 @@
                     console.log(error);
                 }
             });
-
         });
     });
 
 
     $(function () {
         function getFormData($form) {
-            var unindexed_array = $form.serializeArray();
-            var indexed_array = {};
+            var unindexedArray = $form.serializeArray();
+            var indexedArray = {};
 
-            $.map(unindexed_array, function (n, i) {
-                indexed_array[n['name']] = n['value'];
-            });
+            $.map(unindexedArray,
+                function (n, i) {
+                    indexedArray[n['name']] = n['value'];
+                });
 
-            return indexed_array;
+            return indexedArray;
         }
-
-
 
         $("#button_confirm_transaction").click(function () {
             var $form = $("#confirmation_transaction_form");
