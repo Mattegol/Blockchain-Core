@@ -58,7 +58,7 @@ namespace OnlineShopping.Controllers.Api
         {
             var json = JsonConvert.SerializeObject(transaction);
 
-            var uri = "http://localhost:12304/transactions/new";
+            var uri = "http://localhost:61820/transactions/new";
             var stringContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
             var client = new HttpClient();
