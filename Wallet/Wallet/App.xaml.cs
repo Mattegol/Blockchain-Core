@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Wallet.Views;
+using Wallet;
 using Xamarin.Forms;
 
 namespace Wallet

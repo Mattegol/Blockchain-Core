@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 using Wallet.Models;
-using Wallet.Views;
+using Wallet;
 
 namespace Wallet.ViewModels
 {
@@ -21,7 +21,7 @@ namespace Wallet.ViewModels
             Items = new ObservableCollection<Item>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
+            MessagingCenter.Subscribe<ViewTransaction, Item>(this, "AddItem", async (obj, item) =>
             {
                 var _item = item as Item;
                 Items.Add(_item);

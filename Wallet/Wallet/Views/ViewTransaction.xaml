@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="Wallet.ViewTransaction"
+		     Title="New Item">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Total Receives" FontSize="Medium" />
+            <Label Text="" x:Name="TxtReceives" FontSize="Medium" />
+
+            <Label Text="Total Deduct" FontSize="Medium" />
+            <Label Text="" x:Name="TxtDeduct" FontSize="Medium" />
+
+            <Label Text="Total Balance" FontSize="Medium" />
+            <Label Text="" x:Name="TxtBalance" FontSize="Medium" />
+
+            <ListView x:Name="List"></ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

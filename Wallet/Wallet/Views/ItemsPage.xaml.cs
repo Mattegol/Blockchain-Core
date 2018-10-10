@@ -1,53 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
 using Wallet.Models;
-using Wallet.Views;
-using Wallet.ViewModels;
 
-namespace Wallet.Views
+namespace Wallet
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ItemsPage : ContentPage
 	{
-        ItemsViewModel viewModel;
+        public Transaction Transaction { get; set; }
 
         public ItemsPage()
         {
             InitializeComponent();
+            Transaction = new Transaction
+            {
+                PrivateKey = "L3aq7WPiSois3N7GxTr6ZSXMNdfbAZWNebiYvKK5hAUBCijk95rL",
+                Sender = "18jp31DcT3n5vsYHGVhhQa2qsvEve4EUoQ",
+            };
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = this;
         }
 
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+	    private async Task ButtonSave_Clicked(object sender, EventArgs e)
         {
-            var item = args.SelectedItem as Item;
-            if (item == null)
-                return;
+            Credential.PublicKey = Transaction.Sender;
+            Credential.PrivateKey = Transaction.PrivateKey;
 
-            await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
-
-            // Manually deselect item.
-            ItemsListView.SelectedItem = null;
+            await DisplayAlert("Credential", "Keys Updated", "OK");
         }
 
-        async void AddItem_Clicked(object sender, EventArgs e)
+	    private async void CreateSign_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
+            await Navigation.PushModalAsync(new NavigationPage(new ViewTransaction()));
         }
     }
 }
