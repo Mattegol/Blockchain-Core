@@ -23,5 +23,8 @@ namespace E_LearningSite.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Picture path")]
+        public string PicturePath { get; set; }
     }
 }

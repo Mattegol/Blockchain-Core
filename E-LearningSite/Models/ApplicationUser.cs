@@ -9,5 +9,7 @@ namespace E_LearningSite.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public string PicturePath { get; set; }
+
     }
 }

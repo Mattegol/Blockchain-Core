@@ -23,7 +23,7 @@ namespace Wallet
             BindingContext = this;
         }
 
-	    private async Task ButtonSave_Clicked(object sender, EventArgs e)
+	    private async void ButtonSave_Clicked(object sender, EventArgs e)
         {
             Credential.PublicKey = Transaction.Sender;
             Credential.PrivateKey = Transaction.PrivateKey;
