@@ -32,16 +32,33 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Course" asp-action="Browse">Browse Courses</a></li>
                     <li>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" 
-                           aria-haspopup="true" aria-expanded="false">
-                            Instructor
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Index", "Course")">Instructors Dashbboard</a></li>
-                            <li><a href="@Url.Action("Create", "Course")">Create new course</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole(E_LearningSite.Helpers.EnumRole.Instructor) || E_LearningSite.Helpers.EnumRole.IsInstructor)
+                            {
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    Instructor
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a asp-area="" asp-controller="Course" asp-action="Index">Instructors Dashbboard</a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="" asp-controller="Course" asp-action="Create">Create new course</a>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a asp-area="" asp-controller="Course" asp-action="Create">Become an Instructor</a>
+                                </li>
+                            }
+                          }
+
+                        </li>
+                    </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>

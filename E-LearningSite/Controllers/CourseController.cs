@@ -12,6 +12,7 @@ using E_LearningSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace E_LearningSite.Controllers
@@ -21,11 +22,15 @@ namespace E_LearningSite.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CourseController(ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
+        public CourseController(ApplicationDbContext context, 
+            IHostingEnvironment hostingEnvironment, 
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -95,12 +100,21 @@ namespace E_LearningSite.Controllers
                     }
                 }
 
+                course.CourseId = Guid.NewGuid();
+
                 _context.Add(course);
+
+                if (User.IsInRole(Helpers.EnumRole.Instructor) == false)
+                {
+                    await _userManager.AddToRoleAsync(await _userManager.GetUserAsync(User), Helpers.EnumRole.Instructor);
+                    Helpers.EnumRole.IsInstructor = true;
+                }
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "Id", course.TeacherId);
+            //ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "Id", course.TeacherId);
 
             return View(course);
         }
