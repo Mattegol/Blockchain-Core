@@ -1,12 +1,12 @@
-﻿@model IEnumerable<Course>
+﻿@model List<Course>
 
 @{
-    ViewData["Title"] = "Courses";
+    ViewBag.Title = "Browse Courses";
 }
 
 <div class="container">
     <div class="row">
-        <h2 class="text-center">Courses that you teach</h2>
+        <h2 class="text-center">All Courses</h2>
         <hr />
         @foreach (var item in Model)
         {
@@ -14,20 +14,16 @@
                 <div class="panel panel-default">
                     <div class="panel-thumbnail">
                         <a asp-action="Enroll" asp-route-id="@item.Id"></a>
-                        <img src="@item.ImagePath" class="img-responsive" height="150" width="250"/>
+                        <img src="@item.ImagePath" class="img-responsive" height="150" width="250" />
                     </div>
                     <div class="panel-body">
                         <p class="lead">@item.Title</p>
-                        <p class="lead">@item.Revenue</p>
+                        <p class="lead">$@item.Price</p>
                         <p class="lead">@item.Description</p>
-                        <p>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit course</a>
-                        </p>
+
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
-
-

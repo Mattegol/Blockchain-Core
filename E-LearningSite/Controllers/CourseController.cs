@@ -9,12 +9,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using E_LearningSite.Data;
 using E_LearningSite.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
 
 namespace E_LearningSite.Controllers
 {
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,10 +28,19 @@ namespace E_LearningSite.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> Browse()
+        {
+            var courses = _context.Courses.ToListAsync();
+
+            return View(await courses);
+        }
+
         // GET: Course
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Courses.Include(c => c.Teacher);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var applicationDbContext = _context.Courses.Where(u => u.TeacherId == userId);
 
             return View(await applicationDbContext.ToListAsync());
         }
@@ -86,6 +97,7 @@ namespace E_LearningSite.Controllers
 
                 _context.Add(course);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "Id", course.TeacherId);
