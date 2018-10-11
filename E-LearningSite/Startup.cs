@@ -33,6 +33,14 @@ namespace E_LearningSite
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                facebookOptions.Scope.Add("public_profile");
+                facebookOptions.Fields.Add("picture");
+            });
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
