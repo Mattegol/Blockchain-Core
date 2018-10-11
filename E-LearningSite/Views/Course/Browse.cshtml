@@ -13,8 +13,9 @@
             <div class="col-sm-3 col-xs-4">
                 <div class="panel panel-default">
                     <div class="panel-thumbnail">
-                        <a asp-action="Enroll" asp-route-id="@item.Id"></a>
-                        <img src="@item.ImagePath" class="img-responsive" height="150" width="250" />
+                        <a asp-action="Enroll" asp-route-id="@item.Id">
+                            <img src="@item.ImagePath" class="img-responsive" height="150" width="250" />
+                        </a>
                     </div>
                     <div class="panel-body">
                         <p class="lead">@item.Title</p>

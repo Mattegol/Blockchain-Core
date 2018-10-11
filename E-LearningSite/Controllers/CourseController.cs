@@ -50,8 +50,45 @@ namespace E_LearningSite.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> Enroll(Guid id)
+        {
+            var course = await _context.Courses.Include(t => t.Teacher).Include(c => c.CourseStudents)
+                .ThenInclude(s => s.Student).SingleOrDefaultAsync(c => c.CourseId == id);
+
+            var userId = _userManager.GetUserId(User);
+
+            if (course.TeacherId == userId || course.CourseStudents.Any(s => s.StudentId == userId))
+            {
+                return View("Playlist", course.WistiaId);
+            }
+            else
+            {
+                return View(course);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Payment(Guid? courseId = null)
+        {
+            var course = _context.Courses.FirstOrDefault(c => c.CourseId == courseId);
+            course.Revenue += course.Price;
+
+            var userId = _userManager.GetUserId(User);
+            var model = new CourseStudent
+            {
+                StudentId = userId,
+                CourseId = course.CourseId
+            };
+
+            _context.CourseStudents.Add(model);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Enroll", new {id = courseId});
+        }
+
         // GET: Course/Details/5
-        public async Task<IActionResult> Details(int? id)
+            public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {

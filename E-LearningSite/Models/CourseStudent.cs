@@ -11,7 +11,7 @@ namespace E_LearningSite.Models
         public int Id { get; set; }
 
         [Required]
-        public int CourseId { get; set; }
+        public Guid CourseId { get; set; }
 
         public Course Course { get; set; }
 

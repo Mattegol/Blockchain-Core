@@ -1,0 +1,30 @@
+﻿@model Course
+
+@{
+    ViewBag.Title = "Enroll";
+}
+
+<h2>Enroll</h2>
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-offset-3">
+                <form action="@Url.Action("Payment", "Course")" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="courseId" value="@Model.CourseId" />
+                    
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" 
+                            data-key="pk_test_EwC0ExGcf4uVvyvQBKB9C1g1"
+                            data-amount="@(Model.Price * 100)"
+                            data-template="Stripe.com"
+                            data-description="widget"
+                            data-image=""
+                            data-locale="auto">
+                        
+                    </script>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
