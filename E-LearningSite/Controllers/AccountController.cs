@@ -27,7 +27,7 @@ namespace E_LearningSite.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        private IHostingEnvironment _hostingEnvironment;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
