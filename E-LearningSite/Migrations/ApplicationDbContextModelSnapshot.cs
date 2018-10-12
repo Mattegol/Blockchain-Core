@@ -8,13 +8,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace E_LearningSite.Data.Migrations
+namespace E_LearningSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181011151817_AddChangeInCourseStudents")]
-    partial class AddChangeInCourseStudents
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,13 +75,13 @@ namespace E_LearningSite.Data.Migrations
 
             modelBuilder.Entity("E_LearningSite.Models.Course", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CourseId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("CourseId");
 
                     b.Property<string>("Description")
                         .IsRequired();
+
+                    b.Property<int>("Id");
 
                     b.Property<string>("ImagePath");
 
@@ -101,7 +100,7 @@ namespace E_LearningSite.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.HasKey("Id");
+                    b.HasKey("CourseId");
 
                     b.HasIndex("TeacherId");
 
@@ -115,15 +114,13 @@ namespace E_LearningSite.Data.Migrations
 
                     b.Property<Guid>("CourseId");
 
-                    b.Property<int?>("CourseId1");
-
                     b.Property<Guid>("CourseStudentId");
 
                     b.Property<string>("StudentId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId1");
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("StudentId");
 
@@ -250,7 +247,8 @@ namespace E_LearningSite.Data.Migrations
                 {
                     b.HasOne("E_LearningSite.Models.Course", "Course")
                         .WithMany("CourseStudents")
-                        .HasForeignKey("CourseId1");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("E_LearningSite.Models.ApplicationUser", "Student")
                         .WithMany()

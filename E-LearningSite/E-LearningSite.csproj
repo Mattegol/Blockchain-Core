@@ -6,6 +6,15 @@
     <RootNamespace>E_LearningSite</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20181012071905_AddTableCourseStudents.cs" />
+    <Compile Remove="Data\Migrations\20181012071905_AddTableCourseStudents.Designer.cs" />
+    <Compile Remove="Data\Migrations\20181012072047_AddCourseTables.cs" />
+    <Compile Remove="Data\Migrations\20181012072047_AddCourseTables.Designer.cs" />
+    <Compile Remove="Migrations\20181012081512_AddTables.cs" />
+    <Compile Remove="Migrations\20181012081512_AddTables.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.7" />
@@ -20,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\files\" />
   </ItemGroup>
 

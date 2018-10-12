@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace E_LearningSite.Data.Migrations
+namespace E_LearningSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181011091847_AddCourseAndCourseStudentTable")]
-    partial class AddCourseAndCourseStudentTable
+    [Migration("20181012081604_AddTables")]
+    partial class AddTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,13 +76,13 @@ namespace E_LearningSite.Data.Migrations
 
             modelBuilder.Entity("E_LearningSite.Models.Course", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CourseId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("CourseId");
 
                     b.Property<string>("Description")
                         .IsRequired();
+
+                    b.Property<int>("Id");
 
                     b.Property<string>("ImagePath");
 
@@ -101,7 +101,7 @@ namespace E_LearningSite.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.HasKey("Id");
+                    b.HasKey("CourseId");
 
                     b.HasIndex("TeacherId");
 
@@ -113,7 +113,7 @@ namespace E_LearningSite.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CourseId");
+                    b.Property<Guid>("CourseId");
 
                     b.Property<Guid>("CourseStudentId");
 

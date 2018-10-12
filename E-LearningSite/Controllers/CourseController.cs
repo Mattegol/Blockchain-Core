@@ -61,10 +61,8 @@ namespace E_LearningSite.Controllers
             {
                 return View("Playlist", course.WistiaId);
             }
-            else
-            {
-                return View(course);
-            }
+
+            return View(course);
         }
 
         [HttpPost]
@@ -88,7 +86,7 @@ namespace E_LearningSite.Controllers
         }
 
         // GET: Course/Details/5
-            public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
