@@ -13,17 +13,42 @@
                 <form action="@Url.Action("Payment", "Course")" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="courseId" value="@Model.CourseId" />
-                    
-                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" 
+
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                             data-key="pk_test_EwC0ExGcf4uVvyvQBKB9C1g1"
                             data-amount="@(Model.Price * 100)"
                             data-template-name="Stripe.com"
                             data-description="widget"
                             data-image=""
                             data-locale="auto">
-                        
+
                     </script>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-7">
+            <h2>Description</h2>
+            <p>@Model.Description</p>
+        </div>
+        <div class="col-lg-5">
+            <h2>Enrolled Students</h2>
+            <div class="panel-heading">
+                @Model.CourseStudents.Count Student(s)
+            </div>
+            <div class="panel-heading">
+
+                    @foreach (var student in Model.CourseStudents)
+                    {
+                        <div class="col-sm-2">
+                            <img src="@student.Student.PicturePath" height="30" width="30"/>
+                        </div>
+                    }
+               
             </div>
         </div>
     </div>
